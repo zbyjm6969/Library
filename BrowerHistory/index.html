@@ -1,0 +1,44 @@
+<html>
+	<head><title>history</title>
+	<script type="text/javascript" src="../jquery-1.8.2.min.js"></script>
+	</head>
+	<body>
+		<div>
+			<ul>
+				<li data_type="data1"><a href="javascript:;">data1</a></li>
+				<li data_type="data2"><a href="javascript:;">data2</a></li>
+				<li data_type="data3"><a href="javascript:;">data3</a></li>
+			</ul>
+		</div>
+
+		<div>
+			<span id="show"></span>
+		</div>
+
+		<script type="text/javascript">
+			$(function(){
+				$("ul>li").click(function(){
+					addHistory({"type":$(this).attr("data_type")},$(this).attr("data_type"));
+				});
+			});
+
+			function addHistory(data,url){
+				window.history.pushState(data, "document.title", url);
+				getData(url);
+			}
+
+			function getData(url){
+				console.log(url+'.json');
+				$.getJSON(url+'.json',function(json){
+					$("#show").html(json.name);
+				});
+			}
+			window.addEventListener('popstate', function(e){
+				if(history.state){
+					var state = e.state;
+					getData(state.type);
+				}
+			}, false);
+		</script>
+	</body>
+</html>
